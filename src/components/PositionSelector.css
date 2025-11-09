@@ -1,0 +1,42 @@
+.position-selector {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 1rem;
+  min-height: 95px;
+  align-items: flex-start;
+}
+
+.position-btn {
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  background-color: #4a5568;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.position-btn:hover {
+  background-color: #2d3748;
+  border-color: #61dafb;
+}
+
+.position-btn.active {
+  background-color: #61dafb;
+  color: #282c34;
+  box-shadow: 0 0 10px #61dafb;
+}
+
+.position-btn.clear {
+  background-color: #a0aec0;
+  color: #1a202c;
+}
+
+.position-btn.clear:hover {
+  background-color: #718096;
+  border-color: #e2e8f0;
+}

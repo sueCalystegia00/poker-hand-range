@@ -1,0 +1,30 @@
+.App {
+  text-align: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.App header {
+  margin-bottom: 2rem;
+}
+
+.App h1 {
+  font-size: 2.5rem;
+  color: #61dafb;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.selectors {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
