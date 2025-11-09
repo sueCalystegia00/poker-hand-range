@@ -63,5 +63,18 @@
 .hand-call,
 .hand-3bet {
 	filter: brightness(110%);
+	color: white;
 	z-index: 1;
+}
+
+.hand-open-raise {
+	background-color: #3b82f6;
+}
+
+.hand-call {
+	background-color: #ef4444;
+}
+
+.hand-3bet {
+	background-color: #8b5cf6;
 }

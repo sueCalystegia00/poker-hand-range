@@ -65,6 +65,13 @@ function App() {
 					/>
 				</div>
 				<HandRangeGrid selectedPosition={effectivePosition} />
+				<a
+					className='link'
+					href='https://www.youtube.com/watch?v=7vudIk1J_g0'
+					target='_blank'
+				>
+					※reference: ヨコサワハンドレンジ
+				</a>
 			</main>
 		</div>
 	);
