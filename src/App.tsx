@@ -2,8 +2,11 @@ import { useState, useMemo } from "react";
 import HandRangeGrid from "./components/HandRangeGrid";
 import PositionSelector from "./components/PositionSelector";
 import PlayerCountSelector from "./components/PlayerCountSelector";
-import { Position, POSITIONS_BY_PLAYER_COUNT } from "./poker-data";
+import ActionLegend from "./components/ActionLegend";
+import { Position, POSITIONS_BY_PLAYER_COUNT, ActionType } from "./poker-data";
 import "./App.css";
+
+const ALL_ACTIONS: ActionType[] = ["openRaise", "call", "threeBet"];
 
 function App() {
 	const [playerCount, setPlayerCount] = useState<number>(8);
@@ -64,7 +67,18 @@ function App() {
 						onPositionChange={setSelectedPosition}
 					/>
 				</div>
-				<HandRangeGrid selectedPosition={effectivePosition} />
+				<div className='hand-range'>
+					<div className='legend-container'>
+						{selectedPosition ? (
+							<ActionLegend visibleActions={ALL_ACTIONS} />
+						) : (
+							<p className='instruction-text'>
+								ポジションを選択してください
+							</p>
+						)}
+					</div>
+					<HandRangeGrid selectedPosition={effectivePosition} />
+				</div>{" "}
 				<a
 					className='link'
 					href='https://www.youtube.com/watch?v=7vudIk1J_g0'

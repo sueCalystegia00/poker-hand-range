@@ -3,7 +3,6 @@
 	grid-template-columns: repeat(13, 1fr);
 	grid-template-rows: repeat(13, 1fr);
 	width: 100%;
-	max-width: 800px;
 	aspect-ratio: 1 / 1;
 	border-radius: 8px;
 	overflow: hidden;
@@ -54,9 +53,9 @@
 
 /* Interaction styles */
 .hand-cell.dimmed {
-	opacity: 0.3;
-	background-color: #9a9a9a;
-	color: #2e2e2e;
+	opacity: 0.2;
+	background-color: #4a5568; /* A neutral gray */
+	color: #a0aec0;
 }
 
 .hand-open-raise,

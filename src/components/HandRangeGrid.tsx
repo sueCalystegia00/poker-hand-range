@@ -4,6 +4,7 @@ import {
 	Position,
 	ACTION_RANGES,
 	getHandStrengthClass,
+	ActionType,
 } from "../poker-data";
 import "./HandRangeGrid.css";
 
@@ -11,10 +12,20 @@ type HandRangeGridProps = {
 	selectedPosition: Position | null;
 };
 
-const HandRangeGrid: React.FC<HandRangeGridProps> = ({ selectedPosition }) => {
+const HandRangeGrid: React.FC<HandRangeGridProps> = ({
+	selectedPosition,
+}) => {
 	const currentActionRanges = selectedPosition
 		? ACTION_RANGES[selectedPosition]
 		: null;
+
+	const getHandAction = (hand: string): ActionType | null => {
+		if (!currentActionRanges) return null;
+		if (currentActionRanges.threeBet.has(hand)) return "threeBet";
+		if (currentActionRanges.call.has(hand)) return "call";
+		if (currentActionRanges.openRaise.has(hand)) return "openRaise";
+		return null;
+	};
 
 	return (
 		<div className='hand-range-grid'>
@@ -31,20 +42,20 @@ const HandRangeGrid: React.FC<HandRangeGridProps> = ({ selectedPosition }) => {
 						}
 
 						const strengthClass = getHandStrengthClass(hand);
+						const handAction = getHandAction(hand);
 
 						let actionClass = "";
-						if (selectedPosition && currentActionRanges) {
-							if (currentActionRanges.threeBet.has(hand)) {
+						if (selectedPosition && handAction) {
+							if (handAction === "threeBet") {
 								actionClass = "hand-3bet";
-							} else if (currentActionRanges.call.has(hand)) {
+							} else if (handAction === "call") {
 								actionClass = "hand-call";
-							} else if (currentActionRanges.openRaise.has(hand)) {
+							} else if (handAction === "openRaise") {
 								actionClass = "hand-open-raise";
 							}
 						}
 
-						const isDimmed =
-							selectedPosition && !currentActionRanges?.openRaise.has(hand);
+						const isDimmed = selectedPosition && !handAction;
 
 						const cellClasses = [
 							"hand-cell",

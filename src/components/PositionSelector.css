@@ -3,9 +3,8 @@
 	max-width: 800px;
 	display: flex;
 	flex-direction: column;
+	justify-content: center;
 	align-items: center;
-	margin-bottom: 1rem;
-	min-height: 320px;
 }
 
 .poker-table {
