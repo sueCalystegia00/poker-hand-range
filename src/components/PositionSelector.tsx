@@ -78,7 +78,9 @@ const PositionSelector: React.FC<PositionSelectorProps> = ({
 							<button
 								className={className}
 								style={style}
-								onClick={() => onPositionChange(selectedPosition === pos ? null : pos)}
+								onClick={() =>
+									onPositionChange(selectedPosition === pos ? null : pos)
+								}
 							>
 								{pos}
 							</button>
