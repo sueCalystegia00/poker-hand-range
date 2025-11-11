@@ -38,6 +38,51 @@ export const POSITIONS_BY_PLAYER_COUNT: Record<number, Position[]> = {
 	2: ["SB", "BB"],
 };
 
+export const getPlayerPosition = (
+	playerCount: number,
+	buttonPosition: number
+): Position | null => {
+	if (playerCount < 2 || playerCount > 9) return null;
+
+	const availablePositions = POSITIONS_BY_PLAYER_COUNT[playerCount];
+	if (!availablePositions) return null;
+
+	// Player is always at seat 0. Seats are numbered 0 to playerCount - 1 clockwise.
+	const mySeat = 0;
+
+	if (playerCount === 2) {
+		// In heads-up, player is SB if button is on their seat, otherwise BB.
+		return buttonPosition === mySeat ? "SB" : "BB";
+	}
+
+	const sbSeat = (buttonPosition + 1) % playerCount;
+	const bbSeat = (buttonPosition + 2) % playerCount;
+
+	if (mySeat === buttonPosition) return "BTN";
+	if (mySeat === sbSeat) return "SB";
+	if (mySeat === bbSeat) return "BB";
+
+	// For other positions, we count backwards from the button.
+	// The positions before BTN are CO, HJ, etc.
+	const reversedEarlyPositions = [...availablePositions].reverse();
+	// BTN, SB, BB are handled, so we look at the rest
+	const earlyPositionNames = reversedEarlyPositions.filter(
+		(p) => p !== "BTN" && p !== "SB" && p !== "BB"
+	);
+
+	// Calculate how many seats the player is away from the button, anti-clockwise.
+	const seatsAway = (buttonPosition - mySeat + playerCount) % playerCount;
+
+	// seatsAway = 1 is CO, 2 is HJ, etc.
+	const positionIndex = seatsAway - 1;
+
+	if (positionIndex >= 0 && positionIndex < earlyPositionNames.length) {
+		return earlyPositionNames[positionIndex];
+	}
+
+	return null; // Should not be reached in normal scenarios
+};
+
 const TIER_1_HANDS = ["AA", "KK", "QQ", "AKs", "AKo"];
 const TIER_2_HANDS = ["JJ", "TT", "99", "AQs", "AJs", "ATs", "KQs", "AQo"];
 const TIER_3_HANDS = ["88", "77", "KJs", "QJs", "JTs", "AJo", "KQo"];

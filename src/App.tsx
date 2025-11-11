@@ -3,33 +3,36 @@ import HandRangeGrid from "./components/HandRangeGrid";
 import PositionSelector from "./components/PositionSelector";
 import PlayerCountSelector from "./components/PlayerCountSelector";
 import ActionLegend from "./components/ActionLegend";
-import { Position, POSITIONS_BY_PLAYER_COUNT, ActionType } from "./poker-data";
+import {
+	Position,
+	POSITIONS_BY_PLAYER_COUNT,
+	ActionType,
+	getPlayerPosition,
+} from "./poker-data";
 import "./App.css";
 
 const ALL_ACTIONS: ActionType[] = ["openRaise", "call", "threeBet"];
 
 function App() {
 	const [playerCount, setPlayerCount] = useState<number>(8);
-	const [selectedPosition, setSelectedPosition] = useState<Position | null>(
-		null
-	);
+	const [buttonPosition, setButtonPosition] = useState<number | null>(null);
 
 	const handlePlayerCountChange = (count: number) => {
 		setPlayerCount(count);
-		setSelectedPosition(null); // Reset position when player count changes
+		setButtonPosition(null); // Reset button position when player count changes
 	};
 
-	const availablePositions = useMemo(() => {
-		return POSITIONS_BY_PLAYER_COUNT[playerCount] || [];
-	}, [playerCount]);
+	const myPosition = useMemo(() => {
+		if (buttonPosition === null) return null;
+		return getPlayerPosition(playerCount, buttonPosition);
+	}, [playerCount, buttonPosition]);
 
 	const effectivePosition = useMemo(() => {
-		if (!selectedPosition) return null;
+		if (!myPosition) return null;
 
-		// Determine the effective position based on the number of players remaining to act.
-		// The ranges are based on a 9-handed game, which we take as the reference.
+		// This logic maps the calculated position to a 9-handed reference
+		// to select the correct hand range data.
 		const referencePositions: Position[] = POSITIONS_BY_PLAYER_COUNT[9];
-
 		const playersAfterMap: { [key: number]: Position } = {};
 		referencePositions.forEach((pos, index) => {
 			const playersAfter = referencePositions.length - 1 - index;
@@ -37,22 +40,22 @@ function App() {
 		});
 
 		const currentPositions = POSITIONS_BY_PLAYER_COUNT[playerCount] || [];
-		const selectedIndex = currentPositions.indexOf(selectedPosition);
+		const selectedIndex = currentPositions.indexOf(myPosition);
 
 		if (selectedIndex === -1) {
-			return selectedPosition; // Fallback
+			return myPosition; // Fallback
 		}
 
 		const playersAfter = currentPositions.length - 1 - selectedIndex;
-		return playersAfterMap[playersAfter] || selectedPosition;
-	}, [playerCount, selectedPosition]);
+		return playersAfterMap[playersAfter] || myPosition;
+	}, [playerCount, myPosition]);
 
 	return (
 		<div className='App'>
 			<header>
 				<h1>Poker Hand Range Viewer</h1>
 				<p>
-					Select player count and position to see its typical opening range.
+					Select player count and the BTN's position to see your opening range.
 				</p>
 			</header>
 			<main>
@@ -62,18 +65,18 @@ function App() {
 						onPlayerCountChange={handlePlayerCountChange}
 					/>
 					<PositionSelector
-						positions={availablePositions}
-						selectedPosition={selectedPosition}
-						onPositionChange={setSelectedPosition}
+						playerCount={playerCount}
+						buttonPosition={buttonPosition}
+						onButtonPositionChange={setButtonPosition}
 					/>
 				</div>
 				<div className='hand-range'>
 					<div className='legend-container'>
-						{selectedPosition ? (
+						{myPosition ? (
 							<ActionLegend visibleActions={ALL_ACTIONS} />
 						) : (
 							<p className='instruction-text'>
-								ポジションを選択してください
+								BTNの位置を選択してください
 							</p>
 						)}
 					</div>
